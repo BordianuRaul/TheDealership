@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Car } from './car.model'
 import {BehaviorSubject, Observable} from "rxjs";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -20,44 +21,29 @@ export class CarService{
   private cars: Car[];
   idCount: number;
   selectedCar: Car | null = null;
+  private baseUrl = 'http://localhost:8080/api/cars';
 
-  constructor() {
-    this.cars = [];
-    this.idCount = 1;
-
-    this.add('Camry', 'Toyota', 2020);
-    this.add('Civic', 'Honda', 2019);
-    this.add('Mustang', 'Ford', 2021);
-    this.add('Model 3', 'Tesla', 2022);
-    this.add('Corvette', 'Chevrolet', 2023);
-    this.add('Accord', 'Honda', 2020);
-    this.add('F-150', 'Ford', 2021);
-    this.add('Camry', 'Toyota', 2022);
-    this.add('Civic', 'Honda', 2023);
-    this.add('Model S', 'Tesla', 2020);
-    this.add('Silverado', 'Chevrolet', 2021);
-    this.add('RAV4', 'Toyota', 2022);
-    this.add('CR-V', 'Honda', 2023);
-    this.add('Mustang', 'Ford', 2020);
-    this.add('Model Y', 'Tesla', 2021);
-    this.add('Equinox', 'Chevrolet', 2022);
-    this.add('Highlander', 'Toyota', 2023);
-    this.add('Civic', 'Honda', 2020);
-    this.add('F-150', 'Ford', 2021);
-    this.add('Model 3', 'Tesla', 2022);
-    this.add('3 Series', 'BMW', 2023);
-    this.add('A4', 'Audi', 2022);
-    this.add('C-Class', 'Mercedes-Benz', 2021);
-    this.add('X5', 'BMW', 2020);
-    this.add('A6', 'Audi', 2019);
-    this.add('E-Class', 'Mercedes-Benz', 2018);
-    this.add('M3', 'BMW', 2017);
-    this.add('Q5', 'Audi', 2016);
-    this.add('GLC', 'Mercedes-Benz', 2015);
-    this.add('X3', 'BMW', 2014);
+  constructor(private http: HttpClient) {
+    this.idCount = 0;
+    this.cars =  [];
+    this.getAllFromBackend();
   }
 
-  getAll() : Car[]{
+  private getAllFromBackend(): void {
+    this.http.get<Car[]>(this.baseUrl).subscribe(
+      (response: Car[]) => {
+        response.forEach((car: Car) => {
+          this.add(car.model, car.brand, car.year);
+        });
+      },
+      (error) => {
+        console.error('Error fetching cars from the backend:', error);
+        this.errorSubject.next('Error fetching cars from the backend');
+      }
+    );
+  }
+
+  getAll(): Car[] {
     return this.cars;
   }
 

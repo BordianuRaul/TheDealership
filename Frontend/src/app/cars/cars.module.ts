@@ -8,6 +8,8 @@ import {AddButtonModule} from "../addButton/add-button.module";
 import {FormsModule} from "@angular/forms";
 import {UpdateButtonModule} from "../update-button/update-button.module";
 import {SortButtonComponent} from "../sort-button/sort-button.component";
+import {BrowserModule} from "@angular/platform-browser";
+import {HttpClientModule} from "@angular/common/http";
 
 
 @NgModule({
@@ -22,7 +24,9 @@ import {SortButtonComponent} from "../sort-button/sort-button.component";
     FormsModule,
     AddButtonModule,
     UpdateButtonModule,
-    SortButtonComponent
+    SortButtonComponent,
+    HttpClientModule
+
   ],
   providers: [
     CarService

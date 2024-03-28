@@ -9,6 +9,7 @@ import {DeleteButtonModule} from "./deleteButton/delete-button.module";
 import {AddButtonModule} from "./addButton/add-button.module";
 import {AppRoutingModule} from "./app.routes";
 import { GoogleChartsModule } from 'angular-google-charts';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -24,7 +25,9 @@ import { GoogleChartsModule } from 'angular-google-charts';
     DeleteButtonModule,
     AddButtonModule,
     AppRoutingModule,
-    GoogleChartsModule
+    GoogleChartsModule,
+    BrowserModule,
+    HttpClientModule
 
   ],
 
