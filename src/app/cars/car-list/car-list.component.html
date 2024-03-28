@@ -1,0 +1,20 @@
+<div class="car-list">
+  <ul>
+    <li *ngFor="let car of cars" (click)="selectCar(car)">
+      <button class="car-button" >
+        <app-car [car]="car" ></app-car>
+      </button>
+      <app-delete-button [car]="car" (delete)="onDelete($event)"></app-delete-button>
+    </li>
+  </ul>
+  <app-sort-button (click)="sortAscending()"></app-sort-button>
+
+  <div class="pagination">
+    <button (click)="goToPage(1)" [disabled]="currentPage === 1">First</button>
+    <button (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
+    <span>Page {{currentPage}} of {{totalPages}}</span>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+    <button (click)="goToPage(totalPages)" [disabled]="currentPage === totalPages">Last</button>
+  </div>
+
+</div>
