@@ -42,4 +42,14 @@ public class Repository {
     public List<Car> getAll(){
         return this.cars;
     }
+
+    public Car getCarByID(Integer id){
+        for (Car car : this.cars) {
+            if (car.getId() == id) {
+                return car;
+            }
+        }
+
+        return new Car(-1, "", "", -1);
+    }
 }

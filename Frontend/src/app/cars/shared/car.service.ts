@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Car } from './car.model'
 import {BehaviorSubject, Observable} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -30,10 +30,15 @@ export class CarService{
   }
 
   private getAllFromBackend(): void {
+    this.idCount = 0;
+    this.cars = [];
     this.http.get<Car[]>(this.baseUrl).subscribe(
       (response: Car[]) => {
+
+        this.carsSubject.next(this.cars);
+
         response.forEach((car: Car) => {
-          this.add(car.model, car.brand, car.year);
+          this.refreshAdd(car.id, car.model, car.brand, car.year);
         });
       },
       (error) => {
@@ -43,11 +48,18 @@ export class CarService{
     );
   }
 
+
   getAll(): Car[] {
     return this.cars;
   }
 
-  add(model:string, brand:string, year:number): void{
+  refreshAdd(id:number, model:string, brand:string, year:number): void{
+    let newCar = new Car(id, model, brand, year);
+    this.cars.push(newCar);
+    this.emitCars();
+  }
+
+  add(model: string, brand: string, year: number): void {
 
     if (model.trim() == '' || brand.trim() == '') {
       this.errorSubject.next('Model and brand cannot be empty');
@@ -58,24 +70,33 @@ export class CarService{
       return;
     }
 
-    let newCar = new Car(this.idCount, model, brand, year);
-    this.incrementIdCount();
-    this.cars.push(newCar);
-    this.emitCars();
+    const params = {
+      model: model,
+      brand: brand,
+      year: year
+    };
+
+    this.http.post(this.baseUrl, null, { params: params }).subscribe(
+      () => {
+        this.getAllFromBackend();
+      },
+      (error) => {
+        console.error('Error adding car:', error);
+      }
+    );
   }
 
-  delete(car:Car) : void{
+  delete(car: Car): void{
+    const deleteUrl = `${this.baseUrl}`;
+    this.http.request('delete', deleteUrl, { body: car }).subscribe(
+      () => {
+        this.getAllFromBackend();
+      },
+      (error) => {
+        console.error('Error deleting car:', error);
 
-    for(let i = 0; i <= this.cars.length; i++)
-    {
-      if(this.cars[i].id == car.id)
-      {
-        this.cars.splice(i, 1);
-        this.emitCars();
-        return;
       }
-    }
-
+    );
   }
 
   update(car: Car , newModel: string, newBrand: string, newYear: number){
@@ -88,19 +109,33 @@ export class CarService{
       this.errorSubject.next('Year must be 1700 or later');
       return;
     }
-
-    for(let i = 0; i <= this.cars.length; i++)
-    {
-      if(this.cars[i].id == car.id)
-      {
-        this.cars[i].model = newModel;
-        this.cars[i].brand = newBrand;
-        this.cars[i].year = newYear;
-        this.emitCars();
-        return;
+    const params = {
+      model: newModel,
+      brand: newBrand,
+      year: newYear
+    };
+    this.http.put(this.baseUrl,car, {params: params}).subscribe(
+      () => {
+        this.getAllFromBackend();
+      },
+      (error) => {
+        console.error('Error update car:', error);
       }
-    }
+    );
 
+  }
+
+  getCarById(id: number): Car {
+    const params = new HttpParams().set('id', id.toString());
+    this.http.get<Car>(`${this.baseUrl}/id`, { params }).subscribe(
+      (car: Car) => {
+        return car;
+      },
+      (error) => {
+        console.error('Error fetching car:', error);
+      }
+    );
+    return new Car(-1, " ", " ", -1);
   }
 
   private incrementIdCount():void{

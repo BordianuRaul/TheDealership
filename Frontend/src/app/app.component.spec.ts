@@ -27,7 +27,7 @@ import {Car} from "./cars/shared/car.model";
     const service = new CarService();
 
     let car = new Car(31, 'data', 'test', 1900);
-    service.add('data', 'test', 1900);
+    service.refreshAdd('data', 'test', 1900);
     expect(service.size()).toEqual(31);
     service.delete(car);
     expect(app.size()).toEqual(30);
@@ -41,7 +41,7 @@ import {Car} from "./cars/shared/car.model";
     const service = new CarService();
 
     let car = new Car(31, 'data', 'test', 1900);
-    service.add('data', 'test', 1900);
+    service.refreshAdd('data', 'test', 1900);
     expect(service.size()).toEqual(31);
     service.update(car, 'newModel', 'newBrand', 1901);
     expect(service.getAll()[30].brand).toEqual('newBrand');
@@ -60,7 +60,7 @@ it('should emit error message when model or brand is empty during add', () => {
     emittedError = error;
   });
 
-  service.add('', 'Toyota', 2020);
+  service.refreshAdd('', 'Toyota', 2020);
   expect(emittedError).toEqual('Model and brand cannot be empty');
 });
 
@@ -74,6 +74,6 @@ it('should emit error message when year is earlier than 1886 during add', () => 
     emittedError = error;
   });
 
-  service.add('Camry', 'Toyota', 1800);
+  service.refreshAdd('Camry', 'Toyota', 1800);
   expect(emittedError).toEqual('Year must be 1700 or later');
 });

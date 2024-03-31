@@ -67,4 +67,8 @@ public class CarService {
     public List<Car> getAll(){
         return this.repository.getAll();
     }
+
+    public Car getCarById(Integer id){
+        return this.repository.getCarByID(id);
+    }
 }
