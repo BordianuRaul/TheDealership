@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Car } from './car.model'
 import {BehaviorSubject, Observable} from "rxjs";
-import {HttpClient, HttpParams} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
+
 
 @Injectable({
   providedIn: 'root'
@@ -61,27 +62,22 @@ export class CarService{
 
   add(model: string, brand: string, year: number): void {
 
-    if (model.trim() == '' || brand.trim() == '') {
-      this.errorSubject.next('Model and brand cannot be empty');
-      return;
-    }
-    if (year < 1886) {
-      this.errorSubject.next('Year must be 1700 or later');
-      return;
-    }
-
     const params = {
       model: model,
       brand: brand,
       year: year
     };
 
-    this.http.post(this.baseUrl, null, { params: params }).subscribe(
+    this.http.post<any>('http://localhost:8080/api/cars', null, { params: params }).subscribe(
       () => {
         this.getAllFromBackend();
       },
-      (error) => {
-        console.error('Error adding car:', error);
+      (error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          alert("Only Ford makes mustangs!");
+        } else {
+
+        }
       }
     );
   }
@@ -125,17 +121,9 @@ export class CarService{
 
   }
 
-  getCarById(id: number): Car {
+  getCarById(id: number): Observable<Car> {
     const params = new HttpParams().set('id', id.toString());
-    this.http.get<Car>(`${this.baseUrl}/id`, { params }).subscribe(
-      (car: Car) => {
-        return car;
-      },
-      (error) => {
-        console.error('Error fetching car:', error);
-      }
-    );
-    return new Car(-1, " ", " ", -1);
+    return this.http.get<Car>(`${this.baseUrl}/id`, { params });
   }
 
   private incrementIdCount():void{

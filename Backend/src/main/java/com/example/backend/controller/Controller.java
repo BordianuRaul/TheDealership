@@ -3,6 +3,8 @@ package com.example.backend.controller;
 import com.example.backend.model.Car;
 import com.example.backend.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -30,8 +32,13 @@ public class Controller {
     }
 
     @PostMapping
-    public void add(@RequestParam String model, @RequestParam String brand, @RequestParam Integer year){
-        carService.add(model, brand, year);
+    public ResponseEntity<Object> add(@RequestParam String model, @RequestParam String brand, @RequestParam Integer year) throws Exception {
+        try {
+            carService.add(model, brand, year);
+            return ResponseEntity.ok().build();
+        }catch (Exception ex){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
     }
 
     @PutMapping
@@ -39,8 +46,8 @@ public class Controller {
         carService.update(car, model, brand, year);
     }
 
-    @GetMapping("/id")
-    public Car getCarById(@RequestParam Integer id ){
+    @GetMapping("/cars/{id}")
+    public Car getCarById(@PathVariable Integer id) throws Exception {
         return carService.getCarById(id);
     }
 }

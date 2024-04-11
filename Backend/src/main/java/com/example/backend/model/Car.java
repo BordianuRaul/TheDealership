@@ -8,7 +8,11 @@ public class Car {
     private String brand;
     private int year;
 
-    public Car(int id, String model, String brand, int year){
+    public Car(int id, String model, String brand, int year) throws Exception {
+        if(model.equals("") || brand.equals("") || year < 1769)
+            throw new Exception("Invalid data for the car");
+        if(model.equals("Mustang") && !brand.equals("Ford"))
+            throw new Exception("Only Ford makes mustangs!");
         this.id = id;
         this.model = model;
         this.brand = brand;

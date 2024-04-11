@@ -1,0 +1,4 @@
+silver->error handling pica netu sau serveru frontend
+      ->generare de n date cu faker, sa mearga cu postman, nu neaparat ceva buton de interactiune cu user-ul
+
+gold->thread separat pt partea cu generarea de date, update la chart in timp real, WEB SOCKETS

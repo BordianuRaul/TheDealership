@@ -13,7 +13,7 @@ public class CarService {
     private int idCount = 0;
 
     @Autowired
-    public CarService(){
+    public CarService() throws Exception {
         this.repository = new Repository();
         this.add("Camry", "Toyota", 2020);
         this.add("Civic", "Honda", 2019);
@@ -49,11 +49,17 @@ public class CarService {
 
     private void incrementIdCount(){this.idCount++;}
 
-    public void add(String model, String brand, int year){
-        Car car = new Car(this.idCount, model, brand, year);
+    public void add(String model, String brand, int year) throws Exception {
+
+        try {
+            Car car = new Car(this.idCount, model, brand, year);
+
         this.incrementIdCount();
 
         this.repository.add(car);
+        }catch (Exception ex){
+            throw new Exception(ex.getMessage());
+        }
     }
 
     public void delete(Car car){
@@ -68,7 +74,7 @@ public class CarService {
         return this.repository.getAll();
     }
 
-    public Car getCarById(Integer id){
+    public Car getCarById(Integer id) throws Exception {
         return this.repository.getCarByID(id);
     }
 }
