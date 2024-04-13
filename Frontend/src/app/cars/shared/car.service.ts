@@ -1,6 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Car } from './car.model'
-import {BehaviorSubject, Observable} from "rxjs";
+import {
+  BehaviorSubject,
+  catchError,
+  fromEvent,
+  fromEventPattern,
+  interval,
+  map, mapTo,
+  merge,
+  Observable,
+  of,
+  Subscription
+} from "rxjs";
 import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
 
 
@@ -19,7 +30,12 @@ export class CarService{
   private errorSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   error$: Observable<string> = this.errorSubject.asObservable();
 
+  networkStatus: boolean = false;
+  networkStatus$: Subscription = Subscription.EMPTY;
+
+
   private cars: Car[];
+
   idCount: number;
   selectedCar: Car | null = null;
   private baseUrl = 'http://localhost:8080/api/cars';
@@ -31,6 +47,7 @@ export class CarService{
   }
 
   private getAllFromBackend(): void {
+    this.checkServerStatus();
     this.idCount = 0;
     this.cars = [];
     this.http.get<Car[]>(this.baseUrl).subscribe(
@@ -126,10 +143,6 @@ export class CarService{
     return this.http.get<Car>(`${this.baseUrl}/id`, { params });
   }
 
-  private incrementIdCount():void{
-    this.idCount++;
-  }
-
   private emitCars(): void {
     this.carsSubject.next([...this.cars]);
   }
@@ -156,7 +169,39 @@ export class CarService{
     });
   }
   getAllRange(startIndex: number, endIndex: number): Car[] {
+    this.checkServerStatus();
     return this.cars.slice(startIndex, endIndex);
+  }
+
+  checkServerStatus(): Observable<boolean> {
+    return this.http.get(this.baseUrl).pipe(
+      map(() => true),
+      catchError(() => of(false))
+    );
+  }
+
+
+  checkNetworkStatus(): Observable<boolean> {
+    const online$ = fromEventPattern<boolean>(
+      handler => window.addEventListener('online', handler),
+      handler => window.removeEventListener('online', handler)
+    ).pipe(mapTo(true));
+
+    const offline$ = fromEventPattern<boolean>(
+      handler => window.addEventListener('offline', handler),
+      handler => window.removeEventListener('offline', handler)
+    ).pipe(mapTo(false));
+
+    const fetchOnline$ = new Observable<boolean>(observer => {
+      fetch('https://www.example.com', { method: 'HEAD', mode: 'no-cors' })
+        .then(() => observer.next(true))
+        .catch(() => observer.next(false));
+    });
+
+    return merge(online$, offline$, fetchOnline$).pipe(
+      catchError(() => of(false))
+    );
+
   }
 
 }

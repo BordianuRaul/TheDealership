@@ -80,5 +80,4 @@ export class CarListComponent implements OnInit, OnDestroy{
     }
   }
 
-
 }

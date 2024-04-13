@@ -1,10 +1,15 @@
-
 <div class="container">
-  <div class="left">
-    <app-car-list></app-car-list>
+  <div *ngIf="isNetworkAvailable; else networkUnavailable" class="serverStatus">
+    <app-server-status></app-server-status>
   </div>
-  <div class="right">
+  <ng-template #networkUnavailable>
+    <app-network-status></app-network-status>
+  </ng-template>
+  <div *ngIf="isNetworkAvailable" class="right">
     <app-add-form></app-add-form>
   </div>
-  <app-chart class="appChart"></app-chart>
+  <div *ngIf="isNetworkAvailable" class="left">
+    <app-car-list></app-car-list>
+  </div>
+  <app-chart class="appChart" *ngIf="isNetworkAvailable"></app-chart>
 </div>

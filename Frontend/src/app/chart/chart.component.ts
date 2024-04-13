@@ -17,9 +17,16 @@ export class ChartComponent implements OnDestroy{
   chartType: ChartType = ChartType.PieChart;
   columns = ['Car Brand', 'Number Of Models'];
   chartOptions = {
-    width: 900,
+    width: 500,
     height: 500,
-    legend: { position: 'none' }
+    'backgroundColor': 'transparent',
+    legend: { position: 'none' },
+    slices: {
+      0: { borderWidth: 0 },
+      1: { borderWidth: 0 },
+
+    }
+
   };
 
   private carsSubscription!: Subscription;

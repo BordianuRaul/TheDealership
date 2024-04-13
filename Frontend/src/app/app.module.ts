@@ -10,6 +10,8 @@ import {AddButtonModule} from "./addButton/add-button.module";
 import {AppRoutingModule} from "./app.routes";
 import { GoogleChartsModule } from 'angular-google-charts';
 import { HttpClientModule } from '@angular/common/http';
+import {ServerStatusComponent} from "./server-status/server-status.component";
+import {ServerStatusModule} from "./server-status/server-status.module";
 
 
 
@@ -27,7 +29,9 @@ import { HttpClientModule } from '@angular/common/http';
     AppRoutingModule,
     GoogleChartsModule,
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    ServerStatusModule,
+
 
   ],
 
