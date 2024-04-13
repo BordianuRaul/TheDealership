@@ -50,4 +50,9 @@ public class Controller {
     public Car getCarById(@PathVariable Integer id) throws Exception {
         return carService.getCarById(id);
     }
+
+    @PostMapping("/generateRandom")
+    public void generateRandomCars(@RequestParam("count") int count) {
+        this.carService.generateRandomCars(count);
+    }
 }
