@@ -15,16 +15,14 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CarTest {
     @Test
     public void testConstructorWithValidData() throws Exception {
-        // Arrange
+
         String model = "Model";
         String brand = "Brand";
         int year = 2022;
         Dealership dealership = new Dealership("PenAuto");
 
-        // Act
         Car car = new Car(model, brand, year, dealership);
 
-        // Assert
         assertEquals(model, car.getModel());
         assertEquals(brand, car.getBrand());
         assertEquals(year, car.getYear());
@@ -33,58 +31,50 @@ public class CarTest {
 
     @Test
     public void testConstructorWithInvalidModel() {
-        // Arrange
+
         String model = "";
         String brand = "Brand";
         int year = 2022;
         Dealership dealership = new Dealership("PenAuto");
 
-        // Act & Assert
         assertThrows(Exception.class, () -> new Car(model, brand, year, dealership));
     }
 
     @Test
     public void testConstructorWithInvalidBrand() {
-        // Arrange
+
         String model = "Model";
         String brand = "";
         int year = 2022;
         Dealership dealership = new Dealership("PenAuto");
 
-        // Act & Assert
         assertThrows(Exception.class, () -> new Car(model, brand, year, dealership));
     }
 
     @Test
     public void testConstructorWithInvalidYear() {
-        // Arrange
         String model = "Model";
         String brand = "Brand";
         int year = 1768; // Invalid year
         Dealership dealership = new Dealership("PenAuto");
 
-        // Act & Assert
         assertThrows(Exception.class, () -> new Car(model, brand, year, dealership));
     }
 
     @Test
     public void testConstructorWithMustangAndNonFordBrand() {
-        // Arrange
         String model = "Mustang";
         String brand = "Chevrolet"; // Non-Ford brand
         int year = 2022;
         Dealership dealership = new Dealership("PenAuto");
 
-        // Act & Assert
         assertThrows(Exception.class, () -> new Car(model, brand, year, dealership));
     }
 
     @Test
     public void testDefaultConstructor() {
-        // Act
         Car car = new Car();
 
-        // Assert
         assertNotNull(car);
     }
 
@@ -110,7 +100,7 @@ public class CarTest {
 
     @Test
     public void testEqualsAndHashCode() throws Exception {
-        // Arrange
+
         String model = "Model";
         String brand = "Brand";
         int year = 2022;
@@ -118,21 +108,19 @@ public class CarTest {
         Car car1 = new Car(model, brand, year, dealership);
         Car car2 = new Car(model, brand, year, dealership);
 
-        // Act & Assert
         assertTrue(car1.equals(car2));
 
     }
 
     @Test
     public void testToString() throws Exception {
-        // Arrange
+
         String model = "Model";
         String brand = "Brand";
         int year = 2022;
         Dealership dealership = new Dealership("PenAuto");
         Car car = new Car(model, brand, year, dealership);
 
-        // Act & Assert
         assertEquals("id = 0 model = Model brand = Brand year = 2022", car.toString());
     }
 }
