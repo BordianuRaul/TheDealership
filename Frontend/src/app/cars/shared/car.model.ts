@@ -6,11 +6,13 @@ export class Car{
   brand: string;
   year: number;
 
+
   constructor(id:number, model:string, brand:string, year:number) {
     this.id = id;
     this.model = model;
     this.brand = brand;
     this.year = year;
+
   }
 
   toString(): string{
@@ -42,5 +44,7 @@ export class Car{
   setYear(year: number): void {
     this.year = year;
   }
+
+
 
 }

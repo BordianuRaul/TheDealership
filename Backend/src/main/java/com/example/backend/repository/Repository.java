@@ -1,24 +1,27 @@
 package com.example.backend.repository;
 
 import com.example.backend.model.Car;
+import com.example.backend.model.Dealership;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class Repository {
-    private List<Car> cars;
+    private List<Dealership> dealerships;
 
     public Repository(){
-        this.cars = new ArrayList<>();
+        this.dealerships  = new ArrayList<>();
+        Dealership firstDealership = new Dealership(1, "MotivateAuto", new ArrayList<>());
+        this.dealerships.add(firstDealership);
     };
 
-    public void add(Car car){
-        this.cars.add(car);
+    public void addCar(Car car){
+        this.dealerships.get(0).getCars().add(car);
     }
 
-    public void update(Car oldCar,String model, String brand, int year){
-        for(Car car: this.cars){
+    public void updateCar(Car oldCar, String model, String brand, int year){
+        for(Car car: this.dealerships.get(0).getCars()){
             if(car.equals(oldCar)){
                 car.setModel(model);
                 car.setBrand(brand);
@@ -28,8 +31,8 @@ public class Repository {
         }
     }
 
-    public void delete(Car carToDelete) {
-        Iterator<Car> iterator = this.cars.iterator();
+    public void deleteCar(Car carToDelete) {
+        Iterator<Car> iterator = this.dealerships.get(0).getCars().iterator();
         while (iterator.hasNext()) {
             Car car = iterator.next();
             if (car.equals(carToDelete)) {
@@ -39,12 +42,12 @@ public class Repository {
         }
     }
 
-    public List<Car> getAll(){
-        return this.cars;
+    public List<Car> getAllCars(){
+        return this.dealerships.get(0).getCars();
     }
 
     public Car getCarByID(Integer id) throws Exception {
-        for (Car car : this.cars) {
+        for (Car car : this.dealerships.get(0).getCars()) {
             if (car.getId() == id) {
                 return car;
             }

@@ -17,24 +17,24 @@ public class Controller {
     private final CarService carService;
 
     @Autowired
-    public Controller(CarService carService) {
-        this.carService = carService;
+    public Controller(CarService service) {
+        this.carService = service;
     }
 
     @GetMapping
     public List<Car> getAllCars() {
-        return carService.getAll();
+         return carService.getAllCars();
     }
 
     @DeleteMapping
     public void delete(@RequestBody Car car) {
-        carService.delete(car);
+        carService.deleteCar(car);
     }
 
     @PostMapping
     public ResponseEntity<Object> add(@RequestParam String model, @RequestParam String brand, @RequestParam Integer year) throws Exception {
         try {
-            carService.add(model, brand, year);
+            carService.saveCar(model, brand, year);
             return ResponseEntity.ok().build();
         }catch (Exception ex){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
@@ -42,8 +42,8 @@ public class Controller {
     }
 
     @PutMapping
-    public void update(@RequestBody Car car, @RequestParam String model, @RequestParam String brand, @RequestParam Integer year){
-        carService.update(car, model, brand, year);
+    public void update(@RequestBody Car car, @RequestParam String model, @RequestParam String brand, @RequestParam Integer year) throws Exception {
+        carService.updateCar(car, model, brand, year);
     }
 
     @GetMapping("/cars/{id}")

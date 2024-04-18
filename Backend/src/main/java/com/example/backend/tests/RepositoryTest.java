@@ -22,8 +22,8 @@ public class RepositoryTest {
 
         Car car = new Car(1, "Toyota Camry", "Toyota", 2022);
 
-        repository.add(car);
-        List<Car> cars = repository.getAll();
+        repository.addCar(car);
+        List<Car> cars = repository.getAllCars();
 
 
         assertEquals(1, cars.size());
@@ -34,10 +34,10 @@ public class RepositoryTest {
     public void testUpdate() throws Exception {
 
         Car car = new Car(1, "Toyota Camry", "Toyota", 2022);
-        repository.add(car);
+        repository.addCar(car);
 
 
-        repository.update(car, "Honda Civic", "Honda", 2023);
+        repository.updateCar(car, "Honda Civic", "Honda", 2023);
         Car updatedCar = repository.getCarByID(1);
 
 
@@ -50,11 +50,11 @@ public class RepositoryTest {
     public void testDelete() throws Exception {
 
         Car car = new Car(1, "Toyota Camry", "Toyota", 2022);
-        repository.add(car);
+        repository.addCar(car);
 
 
-        repository.delete(car);
-        List<Car> cars = repository.getAll();
+        repository.deleteCar(car);
+        List<Car> cars = repository.getAllCars();
 
 
         assertTrue(cars.isEmpty());
@@ -65,11 +65,11 @@ public class RepositoryTest {
 
         Car car1 = new Car(1, "Toyota Camry", "Toyota", 2022);
         Car car2 = new Car(2, "Honda Civic", "Honda", 2023);
-        repository.add(car1);
-        repository.add(car2);
+        repository.addCar(car1);
+        repository.addCar(car2);
 
 
-        List<Car> cars = repository.getAll();
+        List<Car> cars = repository.getAllCars();
 
 
         assertEquals(2, cars.size());
@@ -82,8 +82,8 @@ public class RepositoryTest {
 
         Car car1 = new Car(1, "Toyota Camry", "Toyota", 2022);
         Car car2 = new Car(2, "Honda Civic", "Honda", 2023);
-        repository.add(car1);
-        repository.add(car2);
+        repository.addCar(car1);
+        repository.addCar(car2);
 
 
         Car retrievedCar1 = repository.getCarByID(1);
