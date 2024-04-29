@@ -1,52 +1,39 @@
-
-
-header {
-  background-color: #333;
-  color: #fff;
-  padding: 20px;
-}
-
-main {
-  padding: 20px;
-}
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #333;
-  color: #333;
-}
-footer {
-  background-color: #333;
-  color: #fff;
-  padding: 10px 20px;
-  text-align: center;
-}
-html {
-  background-color: #333;
-}
 .container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Three columns */
+  grid-template-rows: auto auto; /* Two rows */
+  gap: 20px; /* Adjust spacing between elements */
+}
+
+.status-container {
+  grid-column: 3; /* Place status elements in the third column */
+  grid-row: 1; /* Place status elements in the first row */
   display: flex;
+  justify-content: flex-end;
 }
 
-.left {
-  flex: 1;
+.status-container app-server-status,
+.status-container app-network-status {
+  margin-left: 10px; /* Add margin between the two status elements */
+  width: 100px; /* Adjust width as needed */
 }
 
-.right {
-  flex: 1;
-}
-footer {
-  background-color: #333;
+.status-container app-server-status,
+.status-container app-network-status {
+  width: 100px; /* Adjust width as needed */
 }
 
-.serverStatus {
-  position: fixed; /* Position the element relative to the viewport */
-  top: 20px; /* Adjust this value to position it from the top */
-  right: 20px; /* Adjust this value to position it from the right */
-  background-color: #333;
-  color: #fff;
-  padding: 10px;
-  z-index: 9999;
+.form-container {
+  grid-column: 1; /* Place add form in the first column */
+  grid-row: 1 / span 2; /* Span two rows */
 }
 
+.list-container {
+  grid-column: 2; /* Place list in the second column */
+  grid-row: 1 / span 2; /* Span two rows */
+}
+
+.chart-container {
+  grid-column: 3; /* Place chart in the third column */
+  grid-row: 2; /* Place chart in the second row */
+}

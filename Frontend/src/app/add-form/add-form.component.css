@@ -32,6 +32,7 @@ button[type="submit"] {
   border-radius: 8px;
   background-color: #444; /* Input background color */
   color: #fff; /* Text color */
+  font-size: 30px;
 }
 
 input[type="text"],
