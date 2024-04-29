@@ -1,43 +1,14 @@
-import {CarService} from "../../cars/shared/car.service";
 import {Car} from "../../cars/shared/car.model";
 
-export class Dealership {
-  private id: number;
+
+export class Dealership{
+  id: number;
   name: string;
-  private cars: CarService;
+  cars: Car[]
 
-
-
-  constructor(id: number, name: string, cars: CarService){
+  constructor(id: number, name: string, cars: Car[]){
     this.id = id;
-    this.name=  name;
-    this.cars = cars;
-  }
-
-  getId() : number{
-    return this.id;
-  }
-
-  getName() : string{
-    return this.name;
-  }
-
-  getCars(): CarService{
-    return this.cars;
-  }
-
-  setId(id : number) {
-    this.id = id;
-  }
-
-  set(name: string){
     this.name = name;
-  }
-
-  setCars(cars: CarService){
     this.cars = cars;
   }
-
-
-
 }

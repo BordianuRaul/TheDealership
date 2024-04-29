@@ -13,6 +13,8 @@ import {
   Subscription
 } from "rxjs";
 import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
+import {Dealership} from "../../dealership/shared/dealership.model";
+import {DealershipComponent} from "../../dealership/dealership.component";
 
 
 @Injectable({
@@ -33,6 +35,7 @@ export class CarService{
   networkStatus: boolean = false;
   networkStatus$: Subscription = Subscription.EMPTY;
 
+  dealership: Dealership;
 
   private cars: Car[];
 
@@ -41,6 +44,7 @@ export class CarService{
   private baseUrl = 'http://localhost:8080/api/cars';
 
   constructor(private http: HttpClient) {
+    this.dealership = new Dealership(0, "ClujCars", []);
     this.idCount = 0;
     this.cars =  [];
     this.getAllFromBackend();
@@ -54,6 +58,7 @@ export class CarService{
       (response: Car[]) => {
 
         this.carsSubject.next(this.cars);
+        console.log(this.cars.length);
 
         response.forEach((car: Car) => {
           this.refreshAdd(car.id, car.model, car.brand, car.year);
@@ -72,7 +77,8 @@ export class CarService{
   }
 
   refreshAdd(id:number, model:string, brand:string, year:number): void{
-    let newCar = new Car(id, model, brand, year);
+
+    let newCar = new Car(id, model, brand, year, this.dealership);
     this.cars.push(newCar);
     this.emitCars();
   }

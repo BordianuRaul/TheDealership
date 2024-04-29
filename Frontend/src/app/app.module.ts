@@ -12,9 +12,6 @@ import { GoogleChartsModule } from 'angular-google-charts';
 import { HttpClientModule } from '@angular/common/http';
 import {ServerStatusComponent} from "./server-status/server-status.component";
 import {ServerStatusModule} from "./server-status/server-status.module";
-import {DealershipModule} from "./dealership/dealership.module";
-import {DealershipListComponent} from "./home/dealership-list/dealership-list.component";
-import {DealershipListModule} from "./home/dealership-list/dealership-list.module";
 
 
 
@@ -34,13 +31,12 @@ import {DealershipListModule} from "./home/dealership-list/dealership-list.modul
     BrowserModule,
     HttpClientModule,
     ServerStatusModule,
-    DealershipModule,
-    DealershipListModule,
+
 
   ],
 
   providers: [],
-
+  bootstrap: []
 })
 
 export class AppModule{

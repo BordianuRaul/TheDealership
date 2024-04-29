@@ -1,3 +1,4 @@
+import {Dealership} from "../../dealership/shared/dealership.model";
 
 export class Car{
 
@@ -5,14 +6,14 @@ export class Car{
   model: string;
   brand: string;
   year: number;
+  dealership: Dealership;
 
-
-  constructor(id:number, model:string, brand:string, year:number) {
+  constructor(id:number, model:string, brand:string, year:number, dealership: Dealership) {
     this.id = id;
     this.model = model;
     this.brand = brand;
     this.year = year;
-
+    this.dealership = dealership;
   }
 
   toString(): string{
@@ -44,7 +45,5 @@ export class Car{
   setYear(year: number): void {
     this.year = year;
   }
-
-
 
 }
