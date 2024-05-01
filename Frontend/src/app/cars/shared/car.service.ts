@@ -38,7 +38,7 @@ export class CarService{
   dealership: Dealership;
 
   private cars: Car[];
-
+  private queuedAdditions: Car[];
   idCount: number;
   selectedCar: Car | null = null;
   private baseUrl = 'http://localhost:8080/api/cars';
@@ -47,18 +47,23 @@ export class CarService{
     this.dealership = new Dealership(0, "ClujCars", []);
     this.idCount = 0;
     this.cars =  [];
+    this.queuedAdditions = [];
+
+    const queuedAdditionsJson = localStorage.getItem('queuedAdditions');
+    if (queuedAdditionsJson) {
+      this.queuedAdditions = JSON.parse(queuedAdditionsJson);
+    }
     this.getAllFromBackend();
+    this.syncDataToServer();
   }
 
   private getAllFromBackend(): void {
-    this.checkServerStatus();
     this.idCount = 0;
     this.cars = [];
     this.http.get<Car[]>(this.baseUrl).subscribe(
       (response: Car[]) => {
 
         this.carsSubject.next(this.cars);
-        console.log(this.cars.length);
 
         response.forEach((car: Car) => {
           this.refreshAdd(car.id, car.model, car.brand, car.year);
@@ -79,6 +84,11 @@ export class CarService{
   refreshAdd(id:number, model:string, brand:string, year:number): void{
 
     let newCar = new Car(id, model, brand, year, this.dealership);
+    for (const car of this.cars) {
+      if (car.id === newCar.id) {
+        return;
+      }
+    }
     this.cars.push(newCar);
     this.emitCars();
   }
@@ -91,18 +101,27 @@ export class CarService{
       year: year
     };
 
-    this.http.post<any>('http://localhost:8080/api/cars', null, { params: params }).subscribe(
-      () => {
-        this.getAllFromBackend();
-      },
-      (error: HttpErrorResponse) => {
-        if (error.status === 400) {
-          alert("Only Ford makes mustangs!");
-        } else {
+    let serverStatus: boolean;
 
-        }
+    this.checkServerStatus().subscribe((status: boolean) => {
+      serverStatus = status;
+
+      if (serverStatus) {
+        this.http.post<any>('http://localhost:8080/api/cars', null, { params: params }).subscribe(
+          () => {
+            this.getAllFromBackend();
+          },
+          (error: HttpErrorResponse) => {
+            if (error.status === 400) {
+              alert("Only Ford makes mustangs!");
+            }
+          }
+        );
+      } else {
+        const newCar: Car = new Car(0, model, brand, year, this.dealership);
+        this.addToQueuedAdditions(newCar);
       }
-    );
+    });
   }
 
   delete(car: Car): void{
@@ -175,7 +194,6 @@ export class CarService{
     });
   }
   getAllRange(startIndex: number, endIndex: number): Car[] {
-    this.checkServerStatus();
     return this.cars.slice(startIndex, endIndex);
   }
 
@@ -210,4 +228,35 @@ export class CarService{
 
   }
 
+  private syncDataToServer(): void{
+    let serverStatus = false;
+
+    this.checkServerStatus().subscribe((status: boolean) => {
+      serverStatus = status;
+
+      if(this.queuedAdditions.length > 0 && serverStatus){
+        this.queuedAdditions.forEach((car : Car ) => {
+
+          this.add(car.model, car.brand, car.year);
+
+        })
+        this.removeFromQueuedAdditions();
+      }
+    });
+
+  }
+
+  private addToQueuedAdditions(car: Car): void {
+    this.queuedAdditions.push(car);
+    this.updateQueuedAdditionsInStorage();
+  }
+
+  private updateQueuedAdditionsInStorage(): void {
+    localStorage.setItem('queuedAdditions', JSON.stringify(this.queuedAdditions));
+  }
+
+  private removeFromQueuedAdditions(): void {
+    this.queuedAdditions = [];
+    this.updateQueuedAdditionsInStorage();
+  }
 }
