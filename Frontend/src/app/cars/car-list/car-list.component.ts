@@ -12,17 +12,14 @@ import {Subscription} from "rxjs";
 export class CarListComponent implements OnInit, OnDestroy{
   cars: Car[];
   currentPage: number = 1;
-  carsPerPage: number = 5;
+  carsPerPage: number = 50;
   totalPages!: number;
   private carsSubscription!: Subscription;
 
   @Output() carSelected: EventEmitter<Car> = new EventEmitter<Car>();
 
   constructor(private carService: CarService) {
-    const startIndex = (this.currentPage - 1) * this.carsPerPage;
-    const endIndex = startIndex + this.carsPerPage;
-    this.cars = this.carService.getAllRange(startIndex, endIndex);
-    this.calculateTotalPages();
+    this.cars = this.carService.getAll();
   }
 
   ngOnInit() {
@@ -30,14 +27,10 @@ export class CarListComponent implements OnInit, OnDestroy{
       const startIndex = (this.currentPage - 1) * this.carsPerPage;
       const endIndex = startIndex + this.carsPerPage;
       this.cars = this.carService.getAllRange(startIndex, endIndex);
-      this.calculateTotalPages();
     });
   }
   refreshCars(){
-    const startIndex = (this.currentPage - 1) * this.carsPerPage;
-    const endIndex = startIndex + this.carsPerPage;
-    this.cars = this.carService.getAllRange(startIndex, endIndex);
-    this.calculateTotalPages();
+    this.cars = this.carService.getAll();
   }
   onDelete(car: Car) {
     this.carService.delete(car);
@@ -54,10 +47,7 @@ export class CarListComponent implements OnInit, OnDestroy{
     this.carService.sortAscending();
     this.refreshCars();
   }
-  calculateTotalPages() {
-    const totalCars = this.carService.size();
-    this.totalPages = Math.ceil(totalCars / this.carsPerPage);
-  }
+
 
   goToPage(pageNumber: number) {
     if (pageNumber >= 1 && pageNumber <= this.totalPages) {
@@ -67,17 +57,13 @@ export class CarListComponent implements OnInit, OnDestroy{
   }
 
   nextPage() {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.refreshCars();
-    }
+    this.carService.incrementCurrentPageNumber();
+    this.refreshCars();
   }
 
   previousPage() {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.refreshCars();
-    }
+    this.carService.decrementCurrentPageNumber();
+    this.refreshCars();
   }
 
 }

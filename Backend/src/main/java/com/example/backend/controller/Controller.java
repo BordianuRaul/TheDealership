@@ -4,9 +4,11 @@ import com.example.backend.model.Car;
 import com.example.backend.service.CarService;
 import com.example.backend.service.DealershipService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Pageable;
 
 
 import java.util.HashMap;
@@ -64,5 +66,27 @@ public class Controller {
     @GetMapping("/dealerships")
     public Map<String, List<Car>> getAllDealershipsWithCars(){
         return this.dealershipService.getAllDealershipsWithCars();
+    }
+
+    @PostMapping("/generateRandomDealerships")
+    public void generateRandomDealerships(@RequestParam("count") int count){
+        this.dealershipService.generateRandomDealerships(count);
+    }
+
+    @PostMapping("/generateRandomCarsForDealerships")
+    public void generateRandomCarsForDealerships(@RequestParam("count") int count){
+        this.dealershipService.generateRandomCarsForDealerships(count);
+    }
+
+    @GetMapping("/getCarsForDealership")
+    public List<Car> getCarsForDealership(@RequestParam("id") int id){
+        return this.dealershipService.getAllCarsForDealership(id);
+    }
+
+    @GetMapping("/getCarsForDealershipPagination")
+    public List<Car> getCarsForDealership(@RequestParam("id") int id,
+                                          @RequestParam("page") int page,
+                                          @RequestParam("size") int size){
+        return this.dealershipService.getCarsForDealership(id, page, size);
     }
 }

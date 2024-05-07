@@ -35,17 +35,20 @@ export class CarService{
   networkStatus: boolean = false;
   networkStatus$: Subscription = Subscription.EMPTY;
 
-  dealership: Dealership;
 
+  dealership: Dealership;
+  private dealershipID: number = 1000;
+  private currentPage: number;
   private cars: Car[];
   private queuedAdditions: Car[];
   idCount: number;
   selectedCar: Car | null = null;
-  private baseUrl = 'http://localhost:8080/api/cars';
+  private baseUrl = `http://localhost:8080/api/cars/getCarsForDealership?id=${this.dealershipID}`;
 
   constructor(private http: HttpClient) {
     this.dealership = new Dealership(0, "ClujCars", []);
     this.idCount = 0;
+    this.currentPage = 0;
     this.cars =  [];
     this.queuedAdditions = [];
 
@@ -53,6 +56,7 @@ export class CarService{
     if (queuedAdditionsJson) {
       this.queuedAdditions = JSON.parse(queuedAdditionsJson);
     }
+    this.checkServerStatus();
     this.getAllFromBackend();
     this.syncDataToServer();
   }
@@ -60,11 +64,10 @@ export class CarService{
   private getAllFromBackend(): void {
     this.idCount = 0;
     this.cars = [];
-    this.http.get<Car[]>(this.baseUrl).subscribe(
-      (response: Car[]) => {
-
+    let URL =  `http://localhost:8080/api/cars/getCarsForDealershipPagination?id=${this.dealershipID}&page=${this.currentPage}&size=50`;
+    this.http.get<Car[]>(URL).subscribe(
+      (response) => {
         this.carsSubject.next(this.cars);
-
         response.forEach((car: Car) => {
           this.refreshAdd(car.id, car.model, car.brand, car.year);
         });
@@ -105,9 +108,9 @@ export class CarService{
 
     this.checkServerStatus().subscribe((status: boolean) => {
       serverStatus = status;
-
+      let URL =  `http://localhost:8080/api/cars/getCarsForDealershipPagination?id=${this.dealershipID}&page=${this.currentPage}&size=50`;
       if (serverStatus) {
-        this.http.post<any>('http://localhost:8080/api/cars', null, { params: params }).subscribe(
+        this.http.post<any>(URL, null, { params: params }).subscribe(
           () => {
             this.getAllFromBackend();
           },
@@ -198,7 +201,9 @@ export class CarService{
   }
 
   checkServerStatus(): Observable<boolean> {
-    return this.http.get(this.baseUrl).pipe(
+    const URL =  `http://localhost:8080/api/cars/getCarsForDealershipPagination?id=${this.dealershipID}&page=${this.currentPage}&size=50`;
+
+    return this.http.get(URL).pipe(
       map(() => true),
       catchError(() => of(false))
     );
@@ -258,5 +263,19 @@ export class CarService{
   private removeFromQueuedAdditions(): void {
     this.queuedAdditions = [];
     this.updateQueuedAdditionsInStorage();
+  }
+
+  public setCurrentPageNumber(page: number): void{
+    this.currentPage = page;
+  }
+
+  public incrementCurrentPageNumber() : void{
+    this.currentPage++;
+    this.getAllFromBackend();
+  }
+
+  public decrementCurrentPageNumber() : void{
+    this.currentPage--;
+    this.getAllFromBackend();
   }
 }

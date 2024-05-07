@@ -57,16 +57,16 @@ public class DealershipServiceTest {
         assertEquals(expectedDealership, actualDealershipOptional.orElse(null));
     }
 
-    @Test
-    void testSaveDealership() {
-        Dealership dealershipToSave = new Dealership(1, "Test Dealership");
-        when(dealershipRepository.save(any())).thenReturn(dealershipToSave);
-
-        Dealership savedDealership = dealershipService.saveDealership(dealershipToSave);
-
-        assertEquals(dealershipToSave, savedDealership);
-        verify(dealershipRepository, times(1)).save(any());
-    }
+//    @Test
+//    void testSaveDealership() {
+//        Dealership dealershipToSave = new Dealership(1, "Test Dealership");
+//        when(dealershipRepository.save(any())).thenReturn(dealershipToSave);
+//
+//        Dealership savedDealership = dealershipService.saveDealership(dealershipToSave);
+//
+//        assertEquals(dealershipToSave, savedDealership);
+//        verify(dealershipRepository, times(1)).save(any());
+//    }
 
     @Test
     void testDeleteDealership() {

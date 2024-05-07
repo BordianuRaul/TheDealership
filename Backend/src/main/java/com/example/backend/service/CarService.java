@@ -34,6 +34,10 @@ public class CarService {
     }
 
     public Car saveCar(String model, String brand, int year) throws Exception {
+        //add car to dealership
+        //1. refactor method saveCar to have as a parameter a Car
+        //2. in dealership service create the car
+        //3. use faker to generate random data for cars and add them in the DB
         Car car = new Car(model, brand, year, dealership);
         return carRepository.save(car);
     }
