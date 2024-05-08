@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import { Car } from '../shared/car.model';
 import { CarService } from '../shared/car.service';
 import {Subscription} from "rxjs";
@@ -13,10 +13,10 @@ export class CarListComponent implements OnInit, OnDestroy{
   cars: Car[];
   currentPage: number = 1;
   carsPerPage: number = 50;
-  totalPages!: number;
   private carsSubscription!: Subscription;
 
   @Output() carSelected: EventEmitter<Car> = new EventEmitter<Car>();
+  @ViewChild('carListContainer', { static: true }) carList!: ElementRef;
 
   constructor(private carService: CarService) {
     this.cars = this.carService.getAll();
@@ -24,10 +24,9 @@ export class CarListComponent implements OnInit, OnDestroy{
 
   ngOnInit() {
     this.carsSubscription = this.carService.cars$.subscribe(cars => {
-      const startIndex = (this.currentPage - 1) * this.carsPerPage;
-      const endIndex = startIndex + this.carsPerPage;
-      this.cars = this.carService.getAllRange(startIndex, endIndex);
+      this.cars = this.carService.getAll();
     });
+    this.carList.nativeElement.addEventListener('scroll', this.onScroll.bind(this));
   }
   refreshCars(){
     this.cars = this.carService.getAll();
@@ -38,6 +37,7 @@ export class CarListComponent implements OnInit, OnDestroy{
   }
   ngOnDestroy() {
     this.carsSubscription.unsubscribe();
+    this.carList.nativeElement.removeEventListener('scroll', this.onScroll);
   }
   selectCar(car: Car) {
     this.carService.selectCar(car);
@@ -48,22 +48,23 @@ export class CarListComponent implements OnInit, OnDestroy{
     this.refreshCars();
   }
 
+  nextPage() {
+    this.carService.incrementCurrentPageNumber();
+  }
 
-  goToPage(pageNumber: number) {
-    if (pageNumber >= 1 && pageNumber <= this.totalPages) {
-      this.currentPage = pageNumber;
-      this.refreshCars();
+  loadMoreCars(): void{
+
+    this.nextPage();
+    this.cars.concat(this.carService.getCarsFromCurrentPage());
+
+  }
+
+  onScroll() {
+
+    if (this.carList.nativeElement.scrollTop + this.carList.nativeElement.clientHeight >= this.carList.nativeElement.scrollHeight) {
+      this.loadMoreCars();
     }
   }
 
-  nextPage() {
-    this.carService.incrementCurrentPageNumber();
-    this.refreshCars();
-  }
-
-  previousPage() {
-    this.carService.decrementCurrentPageNumber();
-    this.refreshCars();
-  }
 
 }

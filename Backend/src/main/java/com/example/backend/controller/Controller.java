@@ -89,4 +89,12 @@ public class Controller {
                                           @RequestParam("size") int size){
         return this.dealershipService.getCarsForDealership(id, page, size);
     }
+
+    @PostMapping("/saveCarToDealership")
+    public void saveCarToDealership(@RequestParam("dealershipId") int dealershipId,
+                                    @RequestParam("model") String model,
+                                    @RequestParam("brand") String brand,
+                                    @RequestParam("year") int year) throws Exception {
+        this.dealershipService.saveCarToDealership(dealershipId, model, brand, year);
+    }
 }

@@ -88,6 +88,12 @@ public class DealershipService {
         }
     }
 
+    public void saveCarToDealership(int dealershipId, String model, String brand, int year) throws Exception {
+        Dealership dealership = this.getDealershipById(dealershipId).get();
+        Car car = new Car(model, brand, year, dealership);
+        this.carRepository.save(car);
+    }
+
     public List<Car> getAllCarsForDealership(int id){
         Dealership dealership = this.getDealershipById(id).get();
         return this.carRepository.findByDealership(dealership);

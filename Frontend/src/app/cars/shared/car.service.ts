@@ -37,13 +37,14 @@ export class CarService{
 
 
   dealership: Dealership;
-  private dealershipID: number = 1000;
+  private dealershipID: number = 1;
   private currentPage: number;
+  private carsPerPage: number = 50;
   private cars: Car[];
   private queuedAdditions: Car[];
   idCount: number;
   selectedCar: Car | null = null;
-  private baseUrl = `http://localhost:8080/api/cars/getCarsForDealership?id=${this.dealershipID}`;
+  private baseUrl = 'http://localhost:8080/api/cars';
 
   constructor(private http: HttpClient) {
     this.dealership = new Dealership(0, "ClujCars", []);
@@ -64,19 +65,21 @@ export class CarService{
   private getAllFromBackend(): void {
     this.idCount = 0;
     this.cars = [];
-    let URL =  `http://localhost:8080/api/cars/getCarsForDealershipPagination?id=${this.dealershipID}&page=${this.currentPage}&size=50`;
-    this.http.get<Car[]>(URL).subscribe(
-      (response) => {
-        this.carsSubject.next(this.cars);
-        response.forEach((car: Car) => {
-          this.refreshAdd(car.id, car.model, car.brand, car.year);
-        });
-      },
-      (error) => {
-        console.error('Error fetching cars from the backend:', error);
-        this.errorSubject.next('Error fetching cars from the backend');
-      }
-    );
+    for(let pageNr = 0; pageNr <= this.currentPage; pageNr++) {
+      let URL = `http://localhost:8080/api/cars/getCarsForDealershipPagination?id=${this.dealershipID}&page=${pageNr}&size=${this.carsPerPage}`;
+      this.http.get<Car[]>(URL).subscribe(
+        (response) => {
+          this.carsSubject.next(this.cars);
+          response.forEach((car: Car) => {
+            this.refreshAdd(car.id, car.model, car.brand, car.year);
+          });
+        },
+        (error) => {
+          console.error('Error fetching cars from the backend:', error);
+          this.errorSubject.next('Error fetching cars from the backend');
+        }
+      );
+    }
   }
 
 
@@ -99,6 +102,7 @@ export class CarService{
   add(model: string, brand: string, year: number): void {
 
     const params = {
+      dealershipId: this.dealershipID,
       model: model,
       brand: brand,
       year: year
@@ -108,9 +112,9 @@ export class CarService{
 
     this.checkServerStatus().subscribe((status: boolean) => {
       serverStatus = status;
-      let URL =  `http://localhost:8080/api/cars/getCarsForDealershipPagination?id=${this.dealershipID}&page=${this.currentPage}&size=50`;
+
       if (serverStatus) {
-        this.http.post<any>(URL, null, { params: params }).subscribe(
+        this.http.post<any>('http://localhost:8080/api/cars/saveCarToDealership', null, { params: params }).subscribe(
           () => {
             this.getAllFromBackend();
           },
@@ -277,5 +281,9 @@ export class CarService{
   public decrementCurrentPageNumber() : void{
     this.currentPage--;
     this.getAllFromBackend();
+  }
+
+  public getCarsFromCurrentPage(): Car[]{
+    return this.cars.slice(-this.carsPerPage);
   }
 }
