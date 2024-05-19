@@ -1,8 +1,11 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.Car;
+import com.example.backend.model.LoginRequest;
+import com.example.backend.model.User;
 import com.example.backend.service.CarService;
 import com.example.backend.service.DealershipService;
+import com.example.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -21,11 +24,13 @@ import java.util.Map;
 public class Controller {
     private final CarService carService;
     private final DealershipService dealershipService;
+    private final UserService userService;
 
     @Autowired
-    public Controller(CarService service, DealershipService dealershipService) {
+    public Controller(CarService service, DealershipService dealershipService, UserService userService) {
         this.carService = service;
         this.dealershipService = dealershipService;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -97,4 +102,25 @@ public class Controller {
                                     @RequestParam("year") int year) throws Exception {
         this.dealershipService.saveCarToDealership(dealershipId, model, brand, year);
     }
+
+    @PostMapping("/register")
+    public void registerUser(@RequestParam("username") String username,
+                             @RequestParam("email") String email,
+                             @RequestParam("password") String password) throws Exception {
+        this.userService.addUser(username, email, password);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
+        String token = userService.checkLogin(loginRequest.getEmail(), loginRequest.getPassword());
+        if (token != null) {
+            Map<String, String> response = new HashMap<>();
+            response.put("token", token);
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+
 }

@@ -61,7 +61,7 @@ export class CarListComponent implements OnInit, OnDestroy{
 
   onScroll() {
 
-    if (this.carList.nativeElement.scrollTop + this.carList.nativeElement.clientHeight >= this.carList.nativeElement.scrollHeight) {
+    if (this.carList.nativeElement.scrollTop + this.carList.nativeElement.clientHeight >= this.carList.nativeElement.scrollHeight - 1) {
       this.loadMoreCars();
     }
   }

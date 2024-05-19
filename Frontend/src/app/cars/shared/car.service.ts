@@ -37,7 +37,7 @@ export class CarService{
 
 
   dealership: Dealership;
-  private dealershipID: number = 1;
+  private dealershipID: number = 1000;
   private currentPage: number;
   private carsPerPage: number = 50;
   private cars: Car[];

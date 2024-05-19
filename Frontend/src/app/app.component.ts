@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {NavigationEnd, Router, RouterOutlet} from '@angular/router';
 import {CarsModule} from "./cars/cars.module";
 import {AddFormComponent} from "./add-form/add-form.component";
 import {ChartComponent} from "./chart/chart.component";
@@ -8,26 +8,20 @@ import {ServerStatusComponent} from "./server-status/server-status.component";
 import {NetworkStatusComponent} from "./network-status/network-status.component";
 import {CarService} from "./cars/shared/car.service";
 import {NgIf} from "@angular/common";
+import {HomeComponent} from "./home/home.component";
+import {LoginComponent} from "./loginPage/login/login.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CarsModule, AddFormComponent, ChartModule, ServerStatusComponent, NetworkStatusComponent, NgIf],
+  imports: [RouterOutlet, CarsModule, AddFormComponent, ChartModule, ServerStatusComponent, NetworkStatusComponent, NgIf, HomeComponent, LoginComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
-  isNetworkAvailable: boolean;
+export class AppComponent {
+  constructor(private router: Router) {}
 
-  constructor(private carService: CarService) {
-    this.isNetworkAvailable = false;
-  }
-
-  ngOnInit() {
-    this.carService.checkNetworkStatus().subscribe(
-      (isAvailable) => {
-        this.isNetworkAvailable = isAvailable;
-      }
-    );
+  isLoginPage(): boolean{
+    return this.router.url == "/"
   }
 }

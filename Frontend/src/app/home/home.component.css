@@ -1,0 +1,85 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Three columns */
+  grid-template-rows: auto auto; /* Two rows */
+  gap: 20px; /* Adjust spacing between elements */
+}
+
+.status-container {
+  grid-column: 3; /* Place status elements in the third column */
+  grid-row: 1; /* Place status elements in the first row */
+  display: flex;
+  justify-content: flex-end;
+}
+
+.status-container app-server-status,
+.status-container app-network-status {
+  margin-left: 10px; /* Add margin between the two status elements */
+  width: 100px; /* Adjust width as needed */
+}
+
+.status-container app-server-status,
+.status-container app-network-status {
+  width: 100px; /* Adjust width as needed */
+}
+
+.form-container {
+  grid-column: 1; /* Place add form in the first column */
+  grid-row: 1 / span 2; /* Span two rows */
+
+}
+
+.list-container {
+  grid-column: 2; /* Place list in the second column */
+  grid-row: 1 / span 2; /* Span two rows */
+}
+
+.chart-container {
+  grid-column: 3; /* Place chart in the third column */
+  grid-row: 2; /* Place chart in the second row */
+}
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  padding: 1rem;
+  color: white;
+  position: relative; /* Ensure positioning context for overlay */
+}
+
+.left-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* Add space between status components */
+}
+
+.right-section {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%; /* Ensure the section takes full height of the navbar */
+}
+
+.right-section button {
+  background-color: #2a2a2a; /* Slightly darker gray than the navbar */
+  color: white;
+  border: none;
+  padding: 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  height: 100%;
+  width: 100%;
+  text-align: right; /* Align text to the right */
+  font-weight: bold;
+}
+
+.right-section button:hover {
+  background-color: #fff;
+  color: #444;
+}
