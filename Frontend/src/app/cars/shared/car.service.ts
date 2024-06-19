@@ -32,9 +32,8 @@ export class CarService{
   private errorSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
   error$: Observable<string> = this.errorSubject.asObservable();
 
-  networkStatus: boolean = false;
-  networkStatus$: Subscription = Subscription.EMPTY;
-
+  private isChartVisibleSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  isChartVisible$: Observable<boolean> = this.isChartVisibleSubject.asObservable();
 
   dealership: Dealership;
   private dealershipID: number = 1000;
@@ -62,7 +61,7 @@ export class CarService{
     this.syncDataToServer();
   }
 
-  private getAllFromBackend(): void {
+  public getAllFromBackend(): void {
     this.idCount = 0;
     this.cars = [];
     for(let pageNr = 0; pageNr <= this.currentPage; pageNr++) {
@@ -285,5 +284,9 @@ export class CarService{
 
   public getCarsFromCurrentPage(): Car[]{
     return this.cars.slice(-this.carsPerPage);
+  }
+
+  setChartVisibility(isVisible: boolean): void {
+    this.isChartVisibleSubject.next(isVisible);
   }
 }

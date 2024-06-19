@@ -12,6 +12,9 @@ import { GoogleChartsModule } from 'angular-google-charts';
 import { HttpClientModule } from '@angular/common/http';
 import {ServerStatusComponent} from "./server-status/server-status.component";
 import {ServerStatusModule} from "./server-status/server-status.module";
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faCar, faCalendarAlt, faWarehouse } from '@fortawesome/free-solid-svg-icons';
+
 
 
 
@@ -31,6 +34,8 @@ import {ServerStatusModule} from "./server-status/server-status.module";
     BrowserModule,
     HttpClientModule,
     ServerStatusModule,
+    FontAwesomeModule
+
 
 
   ],

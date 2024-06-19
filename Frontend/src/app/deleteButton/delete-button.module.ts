@@ -4,14 +4,16 @@ import {CarListComponent} from "../cars/car-list/car-list.component";
 import {CommonModule} from "@angular/common";
 import {CarService} from "../cars/shared/car.service";
 import {DeleteButtonComponent} from "./delete-button.component";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 
 @NgModule({
   declarations: [
     DeleteButtonComponent
   ],
-  imports:[
-    CommonModule
-  ],
+    imports: [
+        CommonModule,
+        FaIconComponent
+    ],
   providers: [
 
   ],

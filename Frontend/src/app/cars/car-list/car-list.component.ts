@@ -2,6 +2,8 @@ import {Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChil
 import { Car } from '../shared/car.model';
 import { CarService } from '../shared/car.service';
 import {Subscription} from "rxjs";
+import { faCar } from '@fortawesome/free-solid-svg-icons';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-car-list',
@@ -18,7 +20,7 @@ export class CarListComponent implements OnInit, OnDestroy{
   @Output() carSelected: EventEmitter<Car> = new EventEmitter<Car>();
   @ViewChild('carListContainer', { static: true }) carList!: ElementRef;
 
-  constructor(private carService: CarService) {
+  constructor(private carService: CarService, private router: Router) {
     this.cars = this.carService.getAll();
   }
 
@@ -26,7 +28,7 @@ export class CarListComponent implements OnInit, OnDestroy{
     this.carsSubscription = this.carService.cars$.subscribe(cars => {
       this.cars = this.carService.getAll();
     });
-    this.carList.nativeElement.addEventListener('scroll', this.onScroll.bind(this));
+    window.addEventListener('scroll', this.onScroll.bind(this));
   }
   refreshCars(){
     this.cars = this.carService.getAll();
@@ -37,10 +39,12 @@ export class CarListComponent implements OnInit, OnDestroy{
   }
   ngOnDestroy() {
     this.carsSubscription.unsubscribe();
-    this.carList.nativeElement.removeEventListener('scroll', this.onScroll);
   }
   selectCar(car: Car) {
-    this.carService.selectCar(car);
+    this.saveCarToStorage(car);
+  }
+  saveCarToStorage(car: Car) {
+    localStorage.setItem('selectedCar', JSON.stringify(car));
   }
 
   sortAscending(){
@@ -59,11 +63,15 @@ export class CarListComponent implements OnInit, OnDestroy{
 
   }
 
-  onScroll() {
+  onScroll(): void {
 
-    if (this.carList.nativeElement.scrollTop + this.carList.nativeElement.clientHeight >= this.carList.nativeElement.scrollHeight - 1) {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1) {
       this.loadMoreCars();
     }
+  }
+
+  moveToUpdateACarPage(){
+    this.router.navigate(['update-a-car']);
   }
 
 

@@ -5,6 +5,7 @@ import {LoginComponent} from "./loginPage/login/login.component";
 import {HomeComponent} from "./home/home.component";
 import {RegisterComponent} from "./registerPage/register/register.component";
 import {AuthGuard} from "./AuthenticationGuard/authentication-guard.service";
+import {AddCarPageComponent} from "./add-car-page/add-car-page.component";
 
 
 export const routes: Routes = [
@@ -20,6 +21,16 @@ export const routes: Routes = [
   {
     path: '',
     component: LoginComponent
+  },
+
+  {
+    path: 'add-a-car',
+    component: AddCarPageComponent
+  },
+
+  {
+    path: 'update-a-car',
+    component: AddCarPageComponent
   }
 ];
 @NgModule({

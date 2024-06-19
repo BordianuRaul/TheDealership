@@ -16,11 +16,12 @@ export class Car{
     this.dealership = dealership;
   }
 
-  toString(): string{
-
-    return `${this.brand} ${this.model} ${this.year}`;
-
-}
+  toString(): string {
+    return `
+    Brand: ${this.brand}
+    Model: ${this.model}
+    Year: ${this.year}`;
+  }
 
   getModel(): string{
     return this.model;

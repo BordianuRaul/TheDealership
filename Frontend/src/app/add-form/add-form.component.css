@@ -1,51 +1,111 @@
-.right {
-  position: relative;
-  margin: 20px auto;
-  max-width: 600px;
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #2e2e2e;
+}
+
+.body {
+  margin-top: 15%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.topBar {
+  height: 5%;
+}
+
+.leftBar {
+  position: fixed;
+  height: 100%;
+  width: 200px; /* Adjust the width as needed */
+}
+
+.content {
+  margin-left: 200px; /* Adjust according to the width of the leftBar */
   padding: 20px;
-  background-color: #333;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .add-form {
-  padding-right: 40px;
+  background-color: #1e1e1e;
+  color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  padding: 40px; /* Increased padding for a larger form */
+  max-width: 600px; /* Increased max-width for a larger form */
+  width: 100%; /* Ensure form takes up full width up to max-width */
+  margin: 0 auto;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-.form-group {
+.add-form:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.6);
+}
+
+.add-form h1 {
+  font-size: 28px; /* Increased font size */
   margin-bottom: 20px;
 }
 
-label {
+.add-form p {
+  margin-bottom: 20px;
+  color: #ccc;
+}
+
+.add-form label {
   display: block;
+  margin-bottom: 5px;
   font-weight: bold;
-  margin-bottom: 10px;
-  color: #fff; /* Text color */
 }
 
-input[type="text"],
-input[type="number"],
-button[type="submit"] {
-  width: calc(100% - 40px); /* Adjusting for padding-right */
-  padding: 10px; /* Adjusted padding */
+.add-form input[type="text"],
+.add-form input[type="number"],
+.add-form input[type="checkbox"] {
+  width: 100%;
+  padding: 12px; /* Increased padding for larger input fields */
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: #333;
+  color: white;
+}
+
+.add-form input[type="checkbox"] {
+  width: auto;
+  margin-right: 10px;
+}
+
+.add-form button {
+  background-color: #000;
+  color: white;
+  padding: 12px 20px; /* Increased padding for larger button */
   border: none;
-  border-radius: 8px;
-  background-color: #444; /* Input background color */
-  color: #fff; /* Text color */
-  font-size: 30px;
-}
-
-input[type="text"],
-input[type="number"] {
-  height: 40px; /* Adjusted height */
-}
-
-button[type="submit"] {
-  background-color: #4CAF50;
+  border-radius: 4px;
   cursor: pointer;
+  font-size: 17px;
   transition: background-color 0.3s;
 }
 
-button[type="submit"]:hover {
-  background-color: #45a049;
+.add-form button:hover {
+  background-color: #333;
 }
+
+.add-form .privacy-policy {
+  font-size: 12px;
+  color: #888;
+  margin-top: 20px;
+  text-align: center;
+}
+

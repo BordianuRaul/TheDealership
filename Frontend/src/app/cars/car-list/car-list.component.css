@@ -1,104 +1,37 @@
-.car-list {
-  position: relative;
-  margin: 20px auto;
-  max-width: 600px;
-  padding: 20px;
-  background-color: #333;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  overflow-y: scroll;
-  height:700px;
-
+.car-grid {
+  margin-top: 2%;
+  display: grid;
+  gap: 20px; /* Adjust the gap between grid items as needed */
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr)); /* Adjust minmax value to control the item width */
 }
 
-.car-list ul {
-  padding: 0;
+.car-grid-item {
+  border-radius: 16px; /* Adjust border radius as needed */
+  overflow: hidden; /* Ensure content doesn't overflow the grid item */
+  transition: transform 0.2s; /* Add a hover effect for better UX */
+  padding: 20px; /* Adjust padding inside the grid item */
+  text-align: center; /* Optional: Center content horizontally */
 }
 
-.car-list li {
-  margin-bottom: 20px;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s ease-in-out;
-  background-color: #444;
-  position: relative;
-  padding-right: 40px;
-
+.car-grid-item:hover {
+  transform: scale(1.05); /* Scale up on hover */
 }
 
-.car-list li:hover {
-  transform: translateY(-2px);
-}
+.car-button {
 
-
-app-delete-button{
-  opacity: 0;
-}
-
-.car-list li:hover app-delete-button {
-  opacity: 1;
-}
-.car-list li button {
+  width: 100%; /* Full width of the parent .car-grid-item */
+  height: 100%; /* Full height of the parent .car-grid-item */
   background-color: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
+  border: none; /* Remove default button border */
   cursor: pointer;
-  color: inherit;
-  font-size: inherit;
-  font-family: inherit;
-}
-.pagination {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  border-radius: 16px; /* Adjust border radius as needed */
+  transition: transform 0.2s, box-shadow 0.2s; /* Transition for transform and box-shadow */
 }
 
-.pagination button {
-  background-color: #4CAF50;
-  border: none;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 0 5px;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s;
+.car-button:focus {
+  outline: none; /* Remove focus outline */
 }
 
-.pagination button:hover:not([disabled]) {
-  background-color: #45a049;
-}
-
-.pagination button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-}
-
-.pagination span {
-  margin: 0 10px;
-  font-size: 16px;
-  color: #666666;
-}
-.serverConnectionUp {
-  background-color: rgba(76, 175, 80, 0.7);
-  color: rgba(255, 255, 255, 0.8);
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  text-align: center;
-}
-
-.serverConnectionDown {
-  background-color: rgba(255, 0, 0, 0.7);
-  color: rgba(255, 255, 255, 0.8);
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  text-align: center;
+.car-button:hover {
+  transform: scale(1.05); /* Scale up on hover */
 }

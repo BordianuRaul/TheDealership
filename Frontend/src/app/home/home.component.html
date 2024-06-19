@@ -1,21 +1,16 @@
-<div class="navbar">
-  <div class="left-section">
-    <app-server-status></app-server-status>
-    <app-network-status></app-network-status>
+
+<div class="body">
+
+  <div class="topBar">
+    <app-top-bar></app-top-bar>
   </div>
-  <div class="right-section">
-    <button class="LogOutButton" (click)="logout()">Log Out</button>
+
+  <div class="leftBar">
+    <app-left-side-nav-bar></app-left-side-nav-bar>
   </div>
-</div>
-<div class="container">
-  <div class="status-container"></div>
-  <div class="form-container">
-    <app-add-form></app-add-form>
-  </div>
-  <div class="list-container">
+  <div class="content">
     <app-car-list></app-car-list>
   </div>
-  <div class="chart-container">
-    <app-chart class="appChart"></app-chart>
-  </div>
 </div>
+
+<app-modal [isVisible]="isChartModalVisible" (close)="closeChartModal()"></app-modal>

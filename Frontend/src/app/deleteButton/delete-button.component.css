@@ -1,11 +1,11 @@
 .deleteButton {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: #f44336;
+  bottom: 0;
+  right: 0;
+  background-color: #b30000;
   color: white;
   border: none;
-  padding: 8px 16px;
+  padding: 20px 30px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 17px;
@@ -14,5 +14,5 @@
 }
 
 .deleteButton:hover {
-  background-color: #ff6659;
+  background-color: #f44336;
 }

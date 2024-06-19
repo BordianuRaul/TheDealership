@@ -10,6 +10,7 @@ import {UpdateButtonModule} from "../update-button/update-button.module";
 import {SortButtonComponent} from "../sort-button/sort-button.component";
 import {BrowserModule} from "@angular/platform-browser";
 import {HttpClientModule} from "@angular/common/http";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 
 
 @NgModule({
@@ -17,23 +18,25 @@ import {HttpClientModule} from "@angular/common/http";
     CarComponent,
     CarListComponent
   ],
-  imports: [
-    CommonModule,
-    DeleteButtonModule,
-    AddButtonModule,
-    FormsModule,
-    AddButtonModule,
-    UpdateButtonModule,
-    SortButtonComponent,
-    HttpClientModule
+    imports: [
+        CommonModule,
+        DeleteButtonModule,
+        AddButtonModule,
+        FormsModule,
+        AddButtonModule,
+        UpdateButtonModule,
+        SortButtonComponent,
+        HttpClientModule,
+        FaIconComponent
+
+    ],
+  providers: [
 
   ],
-  providers: [
-    CarService
-  ],
-  exports: [
-    CarListComponent
-  ]
+    exports: [
+        CarListComponent,
+        CarComponent
+    ]
 })
 
 export class CarsModule{}
